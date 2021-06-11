@@ -4,8 +4,15 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 import java.util.Queue;
+import java.util.Scanner;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,6 +39,9 @@ public class Voina extends JFrame {
 
 	int score1 = 0;
 	int score2 = 0;
+	
+	int p1wins = 0;
+	int p2wins = 0;
 	String[] deck = { "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣", "K♣", "A♣", "7♢", "8♢", "9♢", "10♢", "J♢", "Q♢", "K♢", "A♢",
 			"7♡", "8♡", "9♡", "10♡", "J♡", "Q♡", "K♡", "A♡", "7♠", "8♠", "9♠", "10♠", "J♠", "Q♠", "K♠", "A♠" };
 
@@ -43,6 +53,10 @@ public class Voina extends JFrame {
 	int col3 = (int) (Math.random() * 13);
 	int row4 = (int) (Math.random() * 4);
 	int col4 = (int) (Math.random() * 13);
+	
+
+	
+	
 
 	public static final Color LIGHT_Green = new Color(0, 255, 91);
 	public static final Color LIGHT_Blue = new Color(81, 153, 255);
@@ -60,9 +74,12 @@ public class Voina extends JFrame {
 	String card23;
 	int warplayer1 = 0;
 	int warplayer2 = 0;
+	String score;
 
 	public Voina() {
 
+	
+		
 		super("Voina");
 		setSize(800, 800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -98,7 +115,11 @@ public class Voina extends JFrame {
 				System.out.println(teste2);
 			}
 		});
-
+		
+		JLabel scoreSheet = new JLabel(score);
+		scoreSheet.setBounds(400, 100, 200, 50);
+		main.add(scoreSheet);
+		
 		JButton play = new JButton("Play");
 		main.add(play);
 		play.setBounds(600, 650, 100, 40);
@@ -113,9 +134,11 @@ public class Voina extends JFrame {
 				if (cardValue(card1) > cardValue(card2)) {
 					teste1.add(card1);
 					teste1.add(card2);
+					p1wins++;
 				} else if (cardValue(card1) < cardValue(card2)) {
 					teste2.add(card1);
 					teste2.add(card2);
+					p2wins++;
 				} else if (cardValue(card1) == cardValue(card2)) {
 					card11 = teste1.remove();
 					card12 = teste1.remove();
@@ -134,6 +157,7 @@ public class Voina extends JFrame {
 						teste1.add(card22);
 						teste1.add(card13);
 						teste1.add(card23);
+						p1wins += 3;
 					} else if(warplayer1 < warplayer2) {
 						teste2.add(card1);
 						teste2.add(card2);
@@ -143,17 +167,44 @@ public class Voina extends JFrame {
 						teste2.add(card22);
 						teste2.add(card13);
 						teste2.add(card23);
+						p2wins += 3;
+						
 					} else if(warplayer1 == warplayer2) {
 						
 					}
 				}
+				try{
+					FileWriter writer = new FileWriter("src/war/failat.txt",true);
+					writer.write("Player 1  " + p1wins +" - " + p2wins + "  Player 2" + System.lineSeparator());
+					writer.close();
+				}
+				catch(IOException ex){
+					System.out.println("An error occured. ");
+					ex.printStackTrace();
+				}
 				System.out.println(teste1);
 				System.out.println(teste2);
+				
+//				try{
+//					
+					Scanner myReader = new Scanner("src/war/failat.txt");
+////					while(score.hasNextLine()){
+					score = myReader.nextLine();
+////					}
+//					myReader.close();
+//				} catch(FileNotFoundException z){
+//					System.out.println("An error occured. ");
+//					z.printStackTrace();
+//				}
 
 			}
-
+			
+		
 		});
 
+		
+		
+		
 		setVisible(true);
 
 	}
