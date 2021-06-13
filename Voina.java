@@ -1,6 +1,7 @@
 package war;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.util.List;
 import java.util.Queue;
@@ -26,9 +27,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class Voina extends JFrame {
-	
+//	create needed fields and panels/buttons etc.
 	JPanel main;
 	JButton test;
 	JButton begin;
@@ -44,8 +47,10 @@ public class Voina extends JFrame {
 
 	int p1wins = 0;
 	int p2wins = 0;
-	String[] deck = { "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣", "K♣", "A♣", "7♢", "8♢", "9♢", "10♢", "J♢", "Q♢", "K♢", "A♢",
-			"7♡", "8♡", "9♡", "10♡", "J♡", "Q♡", "K♡", "A♡", "7♠", "8♠", "9♠", "10♠", "J♠", "Q♠", "K♠", "A♠" };
+	String[] deck = { "2♣", "3♣", "4♣", "5♣", "6♣", "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣", "K♣", "A♣", 
+					  "2♢", "3♢", "4♢", "5♢", "6♢", "7♢", "8♢", "9♢", "10♢", "J♢", "Q♢", "K♢", "A♢",
+					  "2♡", "3♡", "4♡", "5♡", "6♡", "7♡", "8♡", "9♡", "10♡", "J♡", "Q♡", "K♡", "A♡", 
+					  "2♠", "3♠", "4♠", "5♠", "5♠", "6♠", "7♠", "8♠", "9♠", "10♠", "J♠", "Q♠", "K♠", "A♠" };
 
 	int row1 = (int) (Math.random() * 4);
 	int col1 = (int) (Math.random() * 13);
@@ -76,6 +81,10 @@ public class Voina extends JFrame {
 	int exceptionTesteSize;
 	JLabel scoreSheet = new JLabel();
 	File file = new File("src/war/failat.txt");
+	String randomText;
+	JTextField txt = new JTextField(randomText);
+	String size1;
+	String size2;
 
 	public Voina() {
 
@@ -84,7 +93,7 @@ public class Voina extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		Stack<String> teste = new Stack<String>();
-		for (int i = 0; i < 32; i++) {
+		for (int i = 0; i < 52; i++) {
 			teste.add(deck[i]);
 		}
 
@@ -100,10 +109,11 @@ public class Voina extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+//				empty the score file and deal the cards
 				file.delete();
 				deal.setVisible(false);
 				Collections.shuffle(teste);
-				for (int i = 0; i < 32; i++) {
+				for (int i = 0; i < 52; i++) {
 					if (i % 2 == 1) {
 						teste1.add(teste.pop());
 					} else {
@@ -117,16 +127,49 @@ public class Voina extends JFrame {
 		});
 
 		JLabel table = new JLabel("Score");
-		table.setBounds(350, 50, 100, 50);
+		table.setBounds(360, 50, 100, 50);
 		main.add(table);
 
-		scoreSheet.setBounds(300, 100, 200, 50);
+		scoreSheet.setBounds(310, 100, 200, 50);
 		main.add(scoreSheet);
 		
 		JLabel winner = new JLabel();
 		winner.setBounds(350, 0, 100, 50);
 		main.add(winner);
-
+		
+		JLabel player1card1 = new JLabel();
+		main.add(player1card1);
+		player1card1.setBounds(200, 200, 100, 50);
+		player1card1.setFont(new Font("Default", Font.PLAIN, 50));
+		
+		JLabel player2card1 = new JLabel();
+		main.add(player2card1);
+		player2card1.setBounds(500, 650, 100, 50);
+		player2card1.setFont(new Font("Default", Font.PLAIN, 50));
+		
+		JLabel p1teste = new JLabel();
+		main.add(p1teste);
+		p1teste.setBounds(300, 200, 100, 50);
+		
+		JLabel p2teste = new JLabel(size2);
+		main.add(p2teste);
+		p2teste.setBounds(400, 650, 100, 50);
+		
+		JLabel warCards = new JLabel();
+		main.add(warCards);
+		warCards.setBounds(310, 350, 180, 100);
+		warCards.setFont(new Font("Default", Font.PLAIN, 40));
+		
+		JLabel warCardsp1 = new JLabel();
+		main.add(warCardsp1);
+		warCardsp1.setBounds(200, 250, 200, 100);
+		warCardsp1.setFont(new Font("Default", Font.PLAIN, 20));
+		
+		JLabel warCardsp2 = new JLabel();
+		main.add(warCardsp2);
+		warCardsp2.setBounds(400, 550, 200, 100);
+		warCardsp2.setFont(new Font("Default", Font.PLAIN, 20));
+ 		
 		JButton play = new JButton("Play");
 		main.add(play);
 		play.setBounds(600, 650, 100, 40);
@@ -134,7 +177,10 @@ public class Voina extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				warCards.setText("");
+				warCardsp1.setText("");
+				warCardsp2.setText("");
+//				check if somebody is winning
 				if(teste1.size()==0) {
 					winner.setText("Player 2 wins!");
 					play.setVisible(false);
@@ -142,10 +188,11 @@ public class Voina extends JFrame {
 					winner.setText("Player 1 wins!");
 					play.setVisible(false);
 				} else {
+//					check who has the better card
 					card1 = teste1.remove();
-					System.out.println(card1);
+					player1card1.setText(card1);
 					card2 = teste2.remove();
-					System.out.println(card2);
+					player2card1.setText(card2);
 				if (cardValue(card1) > cardValue(card2)) {
 					teste1.add(card1);
 					teste1.add(card2);
@@ -163,16 +210,17 @@ public class Voina extends JFrame {
 						play.setVisible(false);
 					}
 				} else if (cardValue(card1) == cardValue(card2)) {
+//					check if there are enough cards for a war
 					if (teste1.size() < 3 || teste2.size() < 3) {
 						if (teste1.size() < teste2.size()) {
 							exceptionTesteSize = teste1.size();
-							scoreSheet.setText("PLAYER 2 WINS");
+							winner.setText("PLAYER 2 WINS");
 						} else if (teste1.size() > teste2.size()) {
 							exceptionTesteSize = teste2.size();
-							scoreSheet.setText("PLAYER 1 WINS");
+							winner.setText("PLAYER 1 WINS");
 						} else if (teste1.size() == teste2.size()) {
 							exceptionTesteSize = teste2.size();
-							scoreSheet.setText("DRAW");
+							winner.setText("DRAW");
 						}
 						try {
 							exc(exceptionTesteSize);
@@ -180,8 +228,10 @@ public class Voina extends JFrame {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-//						new NotEnoughCardsException(exceptionTesteSize);
+
 					}
+//					play the war
+					warCards.setText(card1 + "VS" + card2);
 					card11 = teste1.remove();
 					card12 = teste1.remove();
 					card13 = teste1.remove();
@@ -190,6 +240,8 @@ public class Voina extends JFrame {
 					card23 = teste2.remove();
 					warplayer1 = cardValue(card11) + cardValue(card12) + cardValue(card13);
 					warplayer2 = cardValue(card21) + cardValue(card22) + cardValue(card23);
+					warCardsp1.setText(card11 + " " + card12 + " " + card13 + " score: " + warplayer1);
+					warCardsp2.setText(card21 + " " + card22 + " " + card23 + " score: " + warplayer2);
 				
 					if (warplayer1 > warplayer2) {
 						teste1.add(card1);
@@ -239,10 +291,12 @@ public class Voina extends JFrame {
 				System.out.println(teste2);
 
 				try {
+//					print the result
 
 					Scanner myReader = new Scanner(new FileReader("src/war/failat.txt"));
 					while (myReader.hasNext()) {
 						scoreSheet.setText(myReader.nextLine());
+
 					}
 					myReader.close();
 				} catch (Exception a) {
@@ -251,22 +305,36 @@ public class Voina extends JFrame {
 				}
 
 			}
+
+				p1teste.setText("Deck 1:" + String.valueOf(teste1.size()));
+				p2teste.setText("Deck 2:" + String.valueOf(teste2.size()));
+				
 			}
 		});
 
 		setVisible(true);
 
 	}
-
+// find the value of the card
 	public int cardValue(String card) {
 		int value = 0;
-		if (card.contains("7")) {
+		if (card.contains("2")) {
+			value = 2;
+		} else if (card.contains("3")) {
+			value = 3;
+		} else if (card.contains("4")) {
+			value = 4;
+		} else if (card.contains("5")) {
+			value = 5;
+		} else if (card.contains("6")) {
+			value = 6;
+		} else if (card.contains("7")) {
 			value = 7;
 		} else if (card.contains("8")) {
 			value = 8;
 		} else if (card.contains("9")) {
 			value = 9;
-		} else if (card.contains("10")) {
+		} else if (card.contains("10")){
 			value = 10;
 		} else if (card.contains("J")) {
 			value = 11;
@@ -280,63 +348,7 @@ public class Voina extends JFrame {
 		return value;
 	}
 
-//	public void war(Queue<String> teste1, Queue<String> teste2) throws NotEnoughCardsException {
-//		if (teste1.size() > 2 && teste2.size() > 2) {
-//			card11 = teste1.remove();
-//			card12 = teste1.remove();
-//			card13 = teste1.remove();
-//			card21 = teste2.remove();
-//			card22 = teste2.remove();
-//			card23 = teste2.remove();
-//			warplayer1 = cardValue(card11) + cardValue(card12) + cardValue(card13);
-//			warplayer2 = cardValue(card21) + cardValue(card22) + cardValue(card23);
-//			if (warplayer1 > warplayer2) {
-//				teste1.add(card1);
-//				teste1.add(card2);
-//				teste1.add(card11);
-//				teste1.add(card21);
-//				teste1.add(card12);
-//				teste1.add(card22);
-//				teste1.add(card13);
-//				teste1.add(card23);
-//				p1wins += 1;
-//			} else if (warplayer1 < warplayer2) {
-//				teste2.add(card1);
-//				teste2.add(card2);
-//				teste2.add(card11);
-//				teste2.add(card21);
-//				teste2.add(card12);
-//				teste2.add(card22);
-//				teste2.add(card13);
-//				teste2.add(card23);
-//				p2wins += 1;
-//			} else if (warplayer1 == warplayer2) {
-//				war(teste1, teste2);
-//			}
-//		} else if(teste1.size() < 3 || teste2.size() < 3) {
-//			if(teste1.size() < teste2.size()) {
-//				exceptionTesteSize = teste1.size();
-//				scoreSheet.setText("PLAYER 2 WINS");
-//			} else if(teste1.size() > teste2.size()) {
-//				exceptionTesteSize = teste2.size();
-//				scoreSheet.setText("PLAYER 1 WINS");
-//			} else if(teste1.size() == teste2.size()) {
-//				exceptionTesteSize = teste2.size();
-//				scoreSheet.setText("DRAW");
-//			}
-//			throw new NotEnoughCardsException(exceptionTesteSize);
-//		}
-//		try {
-//			FileWriter writer = new FileWriter("src/war/teste1.txt", true);
-//			for(int i = 0; i < teste1.size(); i++) {
-//				writer.write(teste1.remove() + System.lineSeparator());
-//			}
-//			writer.close();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
+
 	
 	public void exc(int exceptionTesteSize) throws NotEnoughCardsException {
 		throw new NotEnoughCardsException(exceptionTesteSize);
