@@ -265,18 +265,23 @@ public class Voina extends JFrame {
 						p2wins += 1;
 
 					} else if (warplayer1 == warplayer2) {
-//						String[] midDeck = {card1, card2, card11, card12, card13, card21, card22, card23};
-//						Stack<String> midTeste = new Stack<>();
-//						for (int i = 0; i < 8; i++) {
-//							midTeste.add(midDeck[i]);
-//						}
-//						Collections.shuffle(teste);
-//						for (int i = 0; i < 8; i++) {
-//							if (i % 2 == 1) {
-//								teste1.add(teste.pop());
-//							} else {
-//								teste2.add(teste.pop());
-//							}
+						LinkedList<String> midTeste = new LinkedList<>();
+						midTeste.add(card1);
+						midTeste.add(card2);
+						midTeste.add(card11);
+						midTeste.add(card12);
+						midTeste.add(card13);
+						midTeste.add(card21);
+						midTeste.add(card22);
+						midTeste.add(card23);
+						Collections.shuffle(midTeste);
+						for(int i = 1; i <= 8; i++) {
+							if(i%2==1) {
+								teste1.add(midTeste.remove());
+							} else {
+								teste2.add(midTeste.remove());
+							}
+						}
 			}
 				}
 				try {
